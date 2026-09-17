@@ -33,12 +33,12 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const resumeUrl = "https://docs.google.com/document/d/10_P3XsCIvA6XNAQqnOmG2pRN__J8Y_t7R8fwLtj7mDg/edit";
-const heroVisual = "/manus-storage/remah-hero-visual_28ed523a.png";
-const gamesVisual = "/manus-storage/remah-games-visual_1a23ecd2.png";
-const videoVisual = "/manus-storage/remah-video-visual_8f9ac9cd.png";
-const classroomVisual = "/manus-storage/remah-classroom-visual_72551c2a.png";
-const creativeVisual = "/manus-storage/remah-creative-visual_105de13a.png";
+const resumeUrl = "/resume";
+const heroVisual = "/manus-storage/remah-hero-training_02f3d472.png";
+const gamesVisual = "/manus-storage/remah-portfolio-collage_4588081b.png";
+const videoVisual = "/manus-storage/remah-mentor-session_ef99f151.png";
+const classroomVisual = "/manus-storage/remah-mentor-session_ef99f151.png";
+const creativeVisual = "/manus-storage/remah-portfolio-collage_4588081b.png";
 
 const navItems = [
   { ar: "نبذة", en: "About", href: "#about" },
