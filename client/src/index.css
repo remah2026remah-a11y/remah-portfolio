@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -20,20 +19,20 @@
 }
 
 :root {
-  --background: #f5f1e9;
-  --foreground: #1d252b;
-  --primary: #173d43;
-  --primary-foreground: #f5f1e9;
-  --card: #fbfaf7;
-  --card-foreground: #1d252b;
-  --border: rgba(29, 37, 43, 0.14);
+  --background: #fff7f9;
+  --foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --border: rgba(0, 0, 0, 0.14);
   --ring: #e78263;
-  --ink: #1d252b;
-  --deep: #173d43;
-  --teal: #2c6e6b;
+  --ink: #000000;
+  --deep: #000000;
+  --teal: #000000;
   --coral: #e78263;
-  --sand: #e9dfcf;
-  --muted: #6d7778;
+  --sand: #ffe5eb;
+  --muted: #444444;
   --radius: 1.25rem;
 }
 
@@ -285,3 +284,30 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* Requested visual identity: very pale pink canvas, black Arial typography. */
+body, body * { font-family: Arial, sans-serif !important; }
+body, .site-shell { background: #fff7f9; color: #000; }
+.site-header, .hero-section, .section { color: #000; }
+.experience-section, .education-section { background: #fff7f9; color: #000; }
+.works-section { background: #ffeef2; color: #000; }
+.works-intro h2, .works-intro-copy p, .works-intro-copy strong, .work-filter-bar button, .works-footer { color: #000; }
+.work-filter-bar { border-bottom-color: rgba(0,0,0,.14); }
+.work-filter-bar button.selected, .work-filter-bar button:hover { color: #fff; background: #000; border-color: #000; }
+.work-card, .work-card-featured { color: #000; background: rgba(255,255,255,.72); border-color: rgba(0,0,0,.14); }
+.work-card:hover { background: #fff; border-color: #e78263; }
+.work-card h3 { color: #000; }
+.work-card p, .work-index { color: #444; }
+.work-label, .work-icon, .work-open { color: #000; }
+.work-icon { background: #ffe5eb; }
+.work-open { border-color: rgba(0,0,0,.18); }
+.work-card:hover .work-open { color: #fff; background: #000; border-color: #000; }
+.contact-section { background: #ffeef2; color: #000; }
+.contact-content h2, .contact-content > p:not(.hero-kicker), .contact-details a, .contact-details > span { color: #000; }
+.contact-content .hero-kicker { color: #000; }
+.contact-details svg, .contact-quote { color: #e78263; }
+.contact-section::after { border-color: rgba(0,0,0,.12); box-shadow: 0 0 0 75px rgba(0,0,0,.03), 0 0 0 150px rgba(0,0,0,.02); }
+.contact-glow { background: rgba(231,130,99,.16); }
+.mobile-nav { background: rgba(255,247,249,.97); }
+.mobile-nav a:hover { background: #ffe5eb; }
+.impact-card-dark, .education-card-featured { background: #000; }
