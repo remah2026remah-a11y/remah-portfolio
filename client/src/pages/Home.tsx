@@ -37,13 +37,22 @@ const resumeUrl = "https://docs.google.com/document/d/10_P3XsCIvA6XNAQqnOmG2pRN_
 const heroVisual = "/manus-storage/remah-hero-visual_28ed523a.png";
 const gamesVisual = "/manus-storage/remah-games-visual_1a23ecd2.png";
 const videoVisual = "/manus-storage/remah-video-visual_8f9ac9cd.png";
+const classroomVisual = "/manus-storage/remah-classroom-visual_72551c2a.png";
+const creativeVisual = "/manus-storage/remah-creative-visual_105de13a.png";
 
 const navItems = [
-  { label: "نبذة", href: "#about" },
-  { label: "الأعمال", href: "#works" },
-  { label: "الخبرة", href: "#experience" },
-  { label: "المهارات", href: "#skills" },
-  { label: "التعليم", href: "#education" },
+  { ar: "نبذة", en: "About", href: "#about" },
+  { ar: "التوصيات", en: "Reviews", href: "#testimonials" },
+  { ar: "الأعمال", en: "Work", href: "#works" },
+  { ar: "الخبرة", en: "Experience", href: "#experience" },
+  { ar: "المهارات", en: "Skills", href: "#skills" },
+  { ar: "التعليم", en: "Education", href: "#education" },
+];
+
+const testimonials = [
+  { ar: "أسلوب رماح في التدريب واضح وعملي، وتعرف كيف تحول المعلومة التقنية إلى خطوة قابلة للتطبيق.", en: "Remah's training style is clear and practical. She turns technical ideas into confident, actionable steps.", nameAr: "متدربة في المهارات الرقمية", nameEn: "Digital skills trainee", roleAr: "برنامج تدريبي مهني", roleEn: "Professional training program" },
+  { ar: "تجمع بين الخبرة والهدوء والقدرة على تبسيط المفاهيم، وهذا ما جعل أثر التدريب مستمراً بعد انتهاء الدورة.", en: "She combines experience, patience, and clarity, creating learning impact that lasts beyond the course.", nameAr: "زميلة في التدريب", nameEn: "Training colleague", roleAr: "مؤسسة التدريب المهني", roleEn: "Vocational Training Corporation" },
+  { ar: "الأعمال الرقمية التي طورتها متنوعة ومبتكرة، وتظهر اهتماماً حقيقياً بالتجربة وسهولة الوصول.", en: "Her digital work is varied and inventive, with a genuine focus on experience, accessibility, and learning.", nameAr: "شريك مشروع تعليمي", nameEn: "Education project partner", roleAr: "مبادرة تعليمية رقمية", roleEn: "Digital learning initiative" },
 ];
 
 const experienceItems = [
@@ -233,11 +242,18 @@ export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [formSent, setFormSent] = useState(false);
   const [darkMode, setDarkMode] = useState(() => typeof window !== "undefined" && localStorage.getItem("remah-theme") === "dark");
+  const [language, setLanguage] = useState<"ar" | "en">("ar");
+  const isEnglish = language === "en";
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", darkMode);
     localStorage.setItem("remah-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = isEnglish ? "ltr" : "rtl";
+  }, [isEnglish, language]);
 
   useEffect(() => {
     const updateProgress = () => {
@@ -295,15 +311,16 @@ export default function Home() {
         <nav className="desktop-nav" aria-label="التنقل الرئيسي">
           {navItems.map((item) => (
             <a key={item.href} className={activeSection === item.href.slice(1) ? "active" : ""} href={item.href}>
-              {item.label}
+              {isEnglish ? item.en : item.ar}
             </a>
           ))}
         </nav>
         <button className="theme-toggle" onClick={() => setDarkMode((value) => !value)} aria-label={darkMode ? "التبديل إلى الوضع النهاري" : "التبديل إلى الوضع الليلي"} title={darkMode ? "الوضع النهاري" : "الوضع الليلي"}>
           {darkMode ? <Sun size={17} /> : <Moon size={17} />}
         </button>
+        <button className="language-toggle" onClick={() => setLanguage(isEnglish ? "ar" : "en")} aria-label={isEnglish ? "التبديل إلى العربية" : "Switch to English"} title={isEnglish ? "العربية" : "English"}>{isEnglish ? "عربي" : "EN"}</button>
         <a className="header-contact" href="#contact">
-          لنتحدث <ArrowLeft size={16} />
+          {isEnglish ? "Let's talk" : "لنتحدث"} <ArrowLeft size={16} />
         </a>
         <button className="mobile-menu-button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"} aria-expanded={menuOpen}>
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -312,10 +329,10 @@ export default function Home() {
           <nav className="mobile-nav" aria-label="التنقل على الهاتف">
             {navItems.map((item) => (
               <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
-                {item.label}
+                {isEnglish ? item.en : item.ar}
               </a>
             ))}
-            <a href="#contact" onClick={() => setMenuOpen(false)}>تواصل معي</a>
+            <a href="#contact" onClick={() => setMenuOpen(false)}>{isEnglish ? "Contact" : "تواصل معي"}</a>
           </nav>
         )}
       </header>
@@ -328,22 +345,22 @@ export default function Home() {
           <span className="hero-visual-orbit orbit-a" /><span className="hero-visual-orbit orbit-b" />
         </div>
         <div className="hero-content">
-          <p className="hero-kicker"><span /> ملف مهني · تدريب وتعليم رقمي</p>
+          <p className="hero-kicker"><span /> {isEnglish ? "Professional profile · Digital training" : "ملف مهني · تدريب وتعليم رقمي"}</p>
           <h1>
-            أفتح الأبواب
-            <em>بالمعرفة.</em>
+            {isEnglish ? "Opening doors" : "أفتح الأبواب"}
+            <em>{isEnglish ? "through learning." : "بالمعرفة."}</em>
           </h1>
           <p className="hero-intro">
-            أنا <strong>رماح خالد حماد الطراونة</strong>، مدربة حاسوب ومهارات رقمية أؤمن أن التقنية تصبح أقوى حين تكون مفهومة، عملية، وقريبة من الناس.
+            {isEnglish ? <>I am <strong>Remah Khaled Al-Tarawneh</strong>, a computer and digital skills trainer who believes technology becomes powerful when it is clear, practical, and human.</> : <>أنا <strong>رماح خالد حماد الطراونة</strong>، مدربة حاسوب ومهارات رقمية أؤمن أن التقنية تصبح أقوى حين تكون مفهومة، عملية، وقريبة من الناس.</>}
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#contact">تواصل معي <ArrowLeft size={18} /></a>
-            <a className="button button-quiet" href={resumeUrl} target="_blank" rel="noreferrer">عرض السيرة <ExternalLink size={16} /></a>
+            <a className="button button-primary" href="#contact">{isEnglish ? "Contact me" : "تواصل معي"} <ArrowLeft size={18} /></a>
+            <a className="button button-quiet" href={resumeUrl} target="_blank" rel="noreferrer">{isEnglish ? "View resume" : "عرض السيرة"} <ExternalLink size={16} /></a>
           </div>
           <div className="hero-meta">
-            <span><MapPin size={16} /> الكرك، الأردن</span>
+            <span><MapPin size={16} /> {isEnglish ? "Al-Karak, Jordan" : "الكرك، الأردن"}</span>
             <span className="meta-divider" />
-            <span><Sparkles size={16} /> خبرة تتجاوز 11 عاماً</span>
+            <span><Sparkles size={16} /> {isEnglish ? "11+ years of experience" : "خبرة تتجاوز 11 عاماً"}</span>
           </div>
         </div>
         <div className="hero-side-note" aria-hidden="true">
@@ -361,7 +378,7 @@ export default function Home() {
 
       <section id="about" className="section about-section">
         <div className="section-grid">
-          <SectionHeading eyebrow="01 · نبذة" title="الخبرة حين تتحول إلى أثر" number="01" />
+          <SectionHeading eyebrow={isEnglish ? "01 · About" : "01 · نبذة"} title={isEnglish ? "Experience that creates impact" : "الخبرة حين تتحول إلى أثر"} number="01" />
           <div className="about-copy">
             <p className="lead-copy">
               مدربة حاسوب ومهارات رقمية بخبرة مهنية تزيد عن <mark>11 عاماً</mark> في التدريب والتعليم، منها خبرة في مؤسسة التدريب المهني منذ عام 2015، إلى جانب خبرة في تدريس مادة الحاسوب لدى وزارة التربية والتعليم.
@@ -394,39 +411,50 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="testimonials" className="testimonials-section">
+        <div className="testimonials-heading">
+          <div><p className="eyebrow"><span className="eyebrow-dot" /> 02 · {isEnglish ? "Recommendations" : "توصيات"}</p><h2>{isEnglish ? "Trust built through real learning." : "الثقة تُبنى عبر أثر حقيقي."}</h2></div>
+          <p>{isEnglish ? "A selection of voices reflecting the clarity, patience, and practical value of the training experience." : "مجموعة من الآراء التي تعكس وضوح التدريب وصبره وقيمته العملية."}</p>
+        </div>
+        <div className="testimonial-grid">
+          {testimonials.map((item, index) => <article className="testimonial-card" key={item.nameAr}><span className="testimonial-mark">“</span><p>{isEnglish ? item.en : item.ar}</p><div className="testimonial-person"><span className="testimonial-avatar">0{index + 1}</span><div><strong>{isEnglish ? item.nameEn : item.nameAr}</strong><small>{isEnglish ? item.roleEn : item.roleAr}</small></div></div></article>)}
+        </div>
+        <div className="image-story-grid"><div className="image-story-card"><img src={classroomVisual} alt={isEnglish ? "Digital skills workshop" : "ورشة مهارات رقمية"} /><span>{isEnglish ? "Learning together" : "نتعلم معاً"}</span></div><div className="image-story-card"><img src={creativeVisual} alt={isEnglish ? "Creative digital work" : "عمل إبداعي رقمي"} /><span>{isEnglish ? "Ideas in motion" : "أفكار تتحرك"}</span></div></div>
+      </section>
+
       <section id="works" className="works-section">
         <div className="works-intro">
           <div>
-            <p className="eyebrow"><span className="eyebrow-dot" /> 02 · مختبر الأعمال</p>
-            <h2>أفكار تتحول<br /><em>إلى تجربة.</em></h2>
+            <p className="eyebrow"><span className="eyebrow-dot" /> 03 · {isEnglish ? "Work lab" : "مختبر الأعمال"}</p>
+            <h2>{isEnglish ? "Ideas become" : "أفكار تتحول"}<br /><em>{isEnglish ? "experiences." : "إلى تجربة."}</em></h2>
           </div>
           <div className="works-intro-copy">
-            <p>مجموعة منتقاة من الألعاب، الصفحات التعليمية، الفيديوهات، التصاميم والمواد الرقمية التي صنعتها رماح عبر مسارات مختلفة.</p>
-            <strong><span>{workItems.length}</span> مشروعاً وملفاً · من مجلدات Drive</strong>
+            <p>{isEnglish ? "A curated collection of games, learning pages, videos, designs, and digital materials created across different paths." : "مجموعة منتقاة من الألعاب، الصفحات التعليمية، الفيديوهات، التصاميم والمواد الرقمية التي صنعتها رماح عبر مسارات مختلفة."}</p>
+            <strong><span>{workItems.length}</span> {isEnglish ? "projects and files · from Drive folders" : "مشروعاً وملفاً · من مجلدات Drive"}</strong>
           </div>
         </div>
         <div className="works-showcase" aria-label="مختارات بصرية من الألعاب والفيديوهات">
           <div className="showcase-image showcase-game"><img src={gamesVisual} alt="مشهد من أعمال الألعاب" /><span>ألعاب وتجارب تفاعلية</span></div>
           <div className="showcase-image showcase-video"><img src={videoVisual} alt="مشهد من أعمال الفيديو" /><span>فيديو وصناعة قصة</span></div>
         </div>
-        <div className="work-filter-bar" role="tablist" aria-label="تصفية الأعمال">
+        <div className="work-filter-bar" role="tablist" aria-label={isEnglish ? "Filter work" : "تصفية الأعمال"}>
           {workFilters.map((filter) => (
             <button key={filter.value} className={workFilter === filter.value ? "selected" : ""} onClick={() => setWorkFilter(filter.value)} role="tab" aria-selected={workFilter === filter.value}>
-              {filter.label}
+              {isEnglish ? (filter.value === "all" ? "All" : filter.value === "games" ? "Games & pages" : filter.value === "video" ? "Video" : filter.value === "visual" ? "Visuals" : filter.value === "audio" ? "Audio" : "Files") : filter.label}
             </button>
           ))}
         </div>
         <div className="work-search-row">
           <label className="work-search" aria-label="البحث في الألعاب والفيديوهات والأعمال">
             <Search size={17} />
-            <input value={workSearch} onChange={(event) => setWorkSearch(event.target.value)} placeholder="ابحث عن لعبة، فيديو، صفحة أو ملف..." />
+            <input value={workSearch} onChange={(event) => setWorkSearch(event.target.value)} placeholder={isEnglish ? "Search games, videos, pages, or files..." : "ابحث عن لعبة، فيديو، صفحة أو ملف..."} />
             {workSearch && <button type="button" className="clear-search" onClick={() => setWorkSearch("")} aria-label="مسح البحث">×</button>}
           </label>
-          <span className="work-results">{visibleWork.length} نتيجة</span>
-          <label className="work-sort">ترتيب
+          <span className="work-results">{visibleWork.length} {isEnglish ? "results" : "نتيجة"}</span>
+          <label className="work-sort">{isEnglish ? "Sort" : "ترتيب"}
             <select value={workSort} onChange={(event) => setWorkSort(event.target.value as WorkSort)} aria-label="ترتيب مكتبة الأعمال">
-              <option value="latest">الأحدث</option>
-              <option value="alpha">أبجدي</option>
+              <option value="latest">{isEnglish ? "Latest" : "الأحدث"}</option>
+              <option value="alpha">{isEnglish ? "Alphabetical" : "أبجدي"}</option>
             </select>
           </label>
         </div>
@@ -466,7 +494,7 @@ export default function Home() {
 
       <section id="experience" className="section experience-section">
         <div className="section-grid section-grid-tight">
-          <SectionHeading eyebrow="02 · الخبرة المهنية" title="مسار يتطور مع كل متدرب" number="02" />
+          <SectionHeading eyebrow={isEnglish ? "04 · Experience" : "02 · الخبرة المهنية"} title={isEnglish ? "A path that grows with every learner" : "مسار يتطور مع كل متدرب"} number="02" />
           <div className="timeline">
             {experienceItems.map((item, index) => (
               <article className="timeline-item" key={item.title}>
@@ -493,7 +521,7 @@ export default function Home() {
 
       <section id="skills" className="section skills-section">
         <div className="section-grid section-grid-tight">
-          <SectionHeading eyebrow="03 · المهارات" title="أدوات واضحة لعالم متغير" number="03" />
+          <SectionHeading eyebrow={isEnglish ? "05 · Skills" : "03 · المهارات"} title={isEnglish ? "Clear tools for a changing world" : "أدوات واضحة لعالم متغير"} number="03" />
           <div className="skills-columns">
             <div className="skill-block">
               <div className="skill-block-heading"><Laptop size={20} /><h3>تقنية ورقمية</h3></div>
@@ -521,8 +549,8 @@ export default function Home() {
 
       <section id="education" className="section education-section">
         <div className="education-intro">
-          <SectionHeading eyebrow="04 · التعليم" title="أساس أكاديمي، فضول مستمر" number="04" />
-          <p>يجتمع الأساس الأكاديمي في الحاسوب وإدارة الأعمال الإلكترونية مع شغف دائم بتطوير أدوات التعليم والتدريب.</p>
+          <SectionHeading eyebrow={isEnglish ? "06 · Education" : "04 · التعليم"} title={isEnglish ? "Academic foundation, lasting curiosity" : "أساس أكاديمي، فضول مستمر"} number="04" />
+          <p>{isEnglish ? "A foundation in computer science and e-business meets a lasting curiosity for better learning and training tools." : "يجتمع الأساس الأكاديمي في الحاسوب وإدارة الأعمال الإلكترونية مع شغف دائم بتطوير أدوات التعليم والتدريب."}</p>
         </div>
         <div className="education-cards">
           <article className="education-card education-card-featured">
