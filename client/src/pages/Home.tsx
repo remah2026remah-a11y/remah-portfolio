@@ -230,12 +230,25 @@ export default function Home() {
   const [workSort, setWorkSort] = useState<WorkSort>("latest");
   const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
   const [shareNotice, setShareNotice] = useState("");
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [formSent, setFormSent] = useState(false);
   const [darkMode, setDarkMode] = useState(() => typeof window !== "undefined" && localStorage.getItem("remah-theme") === "dark");
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", darkMode);
     localStorage.setItem("remah-theme", darkMode ? "dark" : "light");
   }, [darkMode]);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0);
+    };
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    return () => { window.removeEventListener("scroll", updateProgress); window.removeEventListener("resize", updateProgress); };
+  }, []);
 
   const visibleWork = workItems.filter((item) => {
     const matchesFilter = workFilter === "all" || item.category === workFilter || (workFilter === "games" && item.category === "pages");
@@ -272,6 +285,7 @@ export default function Home() {
   return (
     <main dir="rtl" className="site-shell">
       <div className="grain" aria-hidden="true" />
+      <div className="scroll-progress" aria-hidden="true"><span style={{ width: `${scrollProgress}%` }} /></div>
       <button className="back-top-button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="العودة إلى أعلى الصفحة" title="العودة إلى الأعلى"><ArrowUp size={18} /><span>أعلى</span></button>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="العودة إلى بداية الصفحة">
@@ -533,7 +547,15 @@ export default function Home() {
           <p className="hero-kicker"><span /> هل لديك فكرة أو فرصة؟</p>
           <h2>لنبنِ أثراً<br /><em>يستمر.</em></h2>
           <p>للتعاون في التدريب، المهارات الرقمية، أو تطوير برامج تعليمية عملية، يسعدني أن أسمع منك.</p>
-          <a className="button button-light" href="mailto:remahkhaled2022@gmail.com">أرسل رسالة <Mail size={18} /></a>
+          {formSent ? (
+            <div className="form-success" role="status"><Sparkles size={20} /><strong>تم استلام رسالتك بنجاح.</strong><span>سأعود إليك في أقرب فرصة.</span><button className="button button-light" onClick={() => setFormSent(false)}>إرسال رسالة أخرى</button></div>
+          ) : (
+            <form className="contact-form" onSubmit={(event) => { event.preventDefault(); setFormSent(true); }}>
+              <div className="form-row"><label>الاسم<input required name="name" placeholder="اكتب اسمك" /></label><label>البريد الإلكتروني<input required type="email" name="email" placeholder="name@example.com" /></label></div>
+              <label>رسالتك<textarea required name="message" rows={4} placeholder="كيف يمكنني مساعدتك؟" /></label>
+              <button className="button button-light" type="submit">إرسال الرسالة <ArrowLeft size={18} /></button>
+            </form>
+          )}
         </div>
         <div className="contact-details">
           <a href="mailto:remahkhaled2022@gmail.com"><Mail size={18} /><span>remahkhaled2022@gmail.com</span></a>
