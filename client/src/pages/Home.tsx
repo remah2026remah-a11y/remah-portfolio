@@ -1,5 +1,6 @@
 import {
   ArrowLeft,
+  ArrowUp,
   ArrowUpLeft,
   Award,
   BrainCircuit,
@@ -33,6 +34,9 @@ import {
 import { useEffect, useState } from "react";
 
 const resumeUrl = "https://docs.google.com/document/d/10_P3XsCIvA6XNAQqnOmG2pRN__J8Y_t7R8fwLtj7mDg/edit";
+const heroVisual = "/manus-storage/remah-hero-visual_28ed523a.png";
+const gamesVisual = "/manus-storage/remah-games-visual_1a23ecd2.png";
+const videoVisual = "/manus-storage/remah-video-visual_8f9ac9cd.png";
 
 const navItems = [
   { label: "نبذة", href: "#about" },
@@ -114,6 +118,12 @@ function getDriveId(url: string) {
 
 function canPreviewWork(work: WorkItem) {
   return work.category === "video" || work.category === "visual";
+}
+
+function getWorkVisual(work: WorkItem) {
+  if (work.category === "games" || work.category === "pages") return gamesVisual;
+  if (work.category === "video" || work.category === "visual") return videoVisual;
+  return undefined;
 }
 
 const workItems: WorkItem[] = [
@@ -262,6 +272,7 @@ export default function Home() {
   return (
     <main dir="rtl" className="site-shell">
       <div className="grain" aria-hidden="true" />
+      <button className="back-top-button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="العودة إلى أعلى الصفحة" title="العودة إلى الأعلى"><ArrowUp size={18} /><span>أعلى</span></button>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="العودة إلى بداية الصفحة">
           <span className="brand-mark">ر</span>
@@ -298,6 +309,10 @@ export default function Home() {
       <section id="top" className="hero-section">
         <div className="hero-orbit orbit-one" aria-hidden="true" />
         <div className="hero-orbit orbit-two" aria-hidden="true" />
+        <div className="hero-visual-wrap" aria-hidden="true">
+          <img className="hero-visual" src={heroVisual} alt="" />
+          <span className="hero-visual-orbit orbit-a" /><span className="hero-visual-orbit orbit-b" />
+        </div>
         <div className="hero-content">
           <p className="hero-kicker"><span /> ملف مهني · تدريب وتعليم رقمي</p>
           <h1>
@@ -376,6 +391,10 @@ export default function Home() {
             <strong><span>{workItems.length}</span> مشروعاً وملفاً · من مجلدات Drive</strong>
           </div>
         </div>
+        <div className="works-showcase" aria-label="مختارات بصرية من الألعاب والفيديوهات">
+          <div className="showcase-image showcase-game"><img src={gamesVisual} alt="مشهد من أعمال الألعاب" /><span>ألعاب وتجارب تفاعلية</span></div>
+          <div className="showcase-image showcase-video"><img src={videoVisual} alt="مشهد من أعمال الفيديو" /><span>فيديو وصناعة قصة</span></div>
+        </div>
         <div className="work-filter-bar" role="tablist" aria-label="تصفية الأعمال">
           {workFilters.map((filter) => (
             <button key={filter.value} className={workFilter === filter.value ? "selected" : ""} onClick={() => setWorkFilter(filter.value)} role="tab" aria-selected={workFilter === filter.value}>
@@ -400,6 +419,7 @@ export default function Home() {
         <div className="work-grid">
           {visibleWork.map((work, index) => (
             <article className={`work-card ${work.featured ? "work-card-featured" : ""}`} key={work.id}>
+              {getWorkVisual(work) && <div className="work-card-visual" style={{ backgroundImage: `url(${getWorkVisual(work)})` }} aria-hidden="true" />}
               <div className="work-card-top"><span className="work-index">{String(index + 1).padStart(2, "0")}</span><span className="work-icon"><WorkIcon category={work.category} /></span></div>
               <button className="work-card-main" onClick={() => canPreviewWork(work) ? setSelectedWork(work) : window.open(work.url, "_blank", "noopener,noreferrer")}>
                 <div className="work-card-content"><span className="work-label">{work.label}</span><h3>{work.name}</h3><p>{work.folder}</p></div>

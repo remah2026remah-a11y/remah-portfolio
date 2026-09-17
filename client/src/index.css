@@ -398,3 +398,54 @@ html.dark-mode .preview-meta h3 { color: #fff5f8; }
   .preview-meta a { width: 100%; margin-right: 0; }
   .share-toast { right: 15px; bottom: 15px; }
 }
+
+/* Larger type, visual assets, motion, and section return control. */
+.hero-visual-wrap { position: absolute; left: 2%; bottom: 74px; z-index: -1; width: min(46%, 540px); aspect-ratio: 1; pointer-events: none; animation: hero-float 7s ease-in-out infinite; }
+.hero-visual { width: 100%; height: 100%; object-fit: cover; border-radius: 44% 56% 52% 48% / 48% 43% 57% 52%; mix-blend-mode: multiply; opacity: .82; filter: saturate(.9) contrast(1.02); }
+.hero-visual-orbit { position: absolute; border: 1px solid rgba(157,54,94,.32); border-radius: 50%; }
+.hero-visual-orbit.orbit-a { inset: 10% 4% 12% 9%; animation: orbit-spin 20s linear infinite; }
+.hero-visual-orbit.orbit-b { inset: 23% 17% 20% 22%; border-color: rgba(231,130,99,.46); animation: orbit-spin 13s linear infinite reverse; }
+.hero-intro { font-size: 19px; }
+.about-copy p { font-size: 18px; }
+.about-copy .lead-copy { font-size: 23px; }
+.hero-kicker, .eyebrow { font-size: 13px; }
+.desktop-nav a, .header-contact { font-size: 14px; }
+.button { min-height: 54px; padding-inline: 26px; font-size: 15px; }
+.section-heading h2 { font-size: clamp(34px, 3.4vw, 50px); }
+.work-card h3 { font-size: 18px; }
+.work-card p, .work-label { font-size: 12px; }
+.works-showcase { display: grid; grid-template-columns: 1.15fr .85fr; gap: 14px; max-width: 1240px; margin: 48px auto 8px; }
+.showcase-image { position: relative; min-height: 205px; overflow: hidden; border-radius: 18px; background: #21151c; box-shadow: 0 18px 38px rgba(0,0,0,.16); }
+.showcase-image img { width: 100%; height: 100%; min-height: 205px; object-fit: cover; display: block; opacity: .88; transition: transform .7s cubic-bezier(.23,1,.32,1), opacity .3s ease; }
+.showcase-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgba(20,8,14,.72)); pointer-events: none; }
+.showcase-image:hover img { transform: scale(1.08) rotate(1deg); opacity: 1; }
+.showcase-image span { position: absolute; right: 18px; bottom: 17px; z-index: 1; color: #fff; font-size: 16px; font-weight: 700; }
+.work-card-visual { height: 74px; margin: -19px -19px 15px; background-position: center; background-size: cover; border-radius: 13px 13px 0 0; opacity: .9; transition: transform .45s ease, filter .3s ease; }
+.work-card:hover .work-card-visual { transform: scale(1.06); filter: saturate(1.15); }
+.back-top-button { position: fixed; left: 22px; bottom: 24px; z-index: 55; display: inline-flex; align-items: center; gap: 6px; padding: 10px 13px; color: #fff; border: 0; border-radius: 999px; background: var(--pink-dark); box-shadow: 0 12px 28px rgba(157,54,94,.28); cursor: pointer; font-size: 12px; transition: transform .2s ease, background .2s ease; }
+.back-top-button:hover { background: var(--pink-deeper); transform: translateY(-3px); }
+@keyframes hero-float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-13px) rotate(1deg); } }
+@keyframes orbit-spin { from { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.04); } to { transform: rotate(360deg) scale(1); } }
+@media (prefers-reduced-motion: reduce) { .hero-visual-wrap, .hero-visual-orbit, .showcase-image img { animation: none; transition: none; } }
+html.dark-mode .work-card-visual { opacity: .78; }
+@media (max-width: 850px) {
+  .hero-visual-wrap { left: -9%; bottom: 70px; width: 66%; opacity: .48; }
+  .hero-intro { font-size: 17px; }
+  .about-copy p { font-size: 16px; }
+  .about-copy .lead-copy { font-size: 20px; }
+  .works-showcase { grid-template-columns: 1fr; margin-top: 34px; }
+  .showcase-image, .showcase-image img { min-height: 160px; }
+  .showcase-image span { font-size: 14px; }
+  .back-top-button { left: 14px; bottom: 15px; padding: 9px 11px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .work-card { animation: card-rise .55s both; }
+  .work-card:nth-child(2n) { animation-delay: .06s; }
+  .work-card:nth-child(3n) { animation-delay: .12s; }
+  .work-card:nth-child(4n) { animation-delay: .18s; }
+  .showcase-game { animation: showcase-drift 7s ease-in-out infinite; }
+  .showcase-video { animation: showcase-drift 7s ease-in-out .8s infinite reverse; }
+}
+@keyframes card-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes showcase-drift { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
