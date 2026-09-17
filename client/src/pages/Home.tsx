@@ -16,10 +16,13 @@ import {
   Mail,
   MapPin,
   Menu,
+  Moon,
   Music2,
   Phone,
   Quote,
+  Search,
   Sparkles,
+  Sun,
   Target,
   UsersRound,
   X,
@@ -200,8 +203,20 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
   const [workFilter, setWorkFilter] = useState<WorkCategory>("all");
+  const [workSearch, setWorkSearch] = useState("");
+  const [darkMode, setDarkMode] = useState(() => typeof window !== "undefined" && localStorage.getItem("remah-theme") === "dark");
 
-  const visibleWork = workFilter === "all" ? workItems : workItems.filter((item) => item.category === workFilter || (workFilter === "games" && item.category === "pages"));
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark-mode", darkMode);
+    localStorage.setItem("remah-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
+
+  const visibleWork = workItems.filter((item) => {
+    const matchesFilter = workFilter === "all" || item.category === workFilter || (workFilter === "games" && item.category === "pages");
+    const query = workSearch.trim().toLowerCase();
+    const matchesSearch = !query || `${item.name} ${item.label} ${item.folder}`.toLowerCase().includes(query);
+    return matchesFilter && matchesSearch;
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -232,6 +247,9 @@ export default function Home() {
             </a>
           ))}
         </nav>
+        <button className="theme-toggle" onClick={() => setDarkMode((value) => !value)} aria-label={darkMode ? "التبديل إلى الوضع النهاري" : "التبديل إلى الوضع الليلي"} title={darkMode ? "الوضع النهاري" : "الوضع الليلي"}>
+          {darkMode ? <Sun size={17} /> : <Moon size={17} />}
+        </button>
         <a className="header-contact" href="#contact">
           لنتحدث <ArrowLeft size={16} />
         </a>
@@ -338,6 +356,14 @@ export default function Home() {
             </button>
           ))}
         </div>
+        <div className="work-search-row">
+          <label className="work-search" aria-label="البحث في الألعاب والفيديوهات والأعمال">
+            <Search size={17} />
+            <input value={workSearch} onChange={(event) => setWorkSearch(event.target.value)} placeholder="ابحث عن لعبة، فيديو، صفحة أو ملف..." />
+            {workSearch && <button type="button" className="clear-search" onClick={() => setWorkSearch("")} aria-label="مسح البحث">×</button>}
+          </label>
+          <span className="work-results">{visibleWork.length} نتيجة</span>
+        </div>
         <div className="work-grid">
           {visibleWork.map((work, index) => (
             <a className={`work-card ${work.featured ? "work-card-featured" : ""}`} key={work.id} href={work.url} target="_blank" rel="noreferrer">
@@ -347,6 +373,7 @@ export default function Home() {
             </a>
           ))}
         </div>
+        {visibleWork.length === 0 && <div className="work-empty">لم نجد عناصر مطابقة. جرّب كلمة أخرى أو أعد ضبط الفلتر.</div>}
         <div className="works-footer"><span>كل بطاقة تفتح الملف الأصلي في Google Drive</span><span className="works-footer-line" /><span>استكشاف · حفظ · مشاركة</span></div>
       </section>
 
