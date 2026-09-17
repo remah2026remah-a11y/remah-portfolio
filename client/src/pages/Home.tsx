@@ -21,11 +21,14 @@ import {
   Phone,
   Quote,
   Search,
+  Share2,
   Sparkles,
   Sun,
   Target,
   UsersRound,
   X,
+  Copy,
+  MessageCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -102,6 +105,16 @@ const courses = [
 
 type WorkCategory = "all" | "games" | "video" | "pages" | "visual" | "audio" | "files";
 type WorkItem = { id: string; name: string; category: Exclude<WorkCategory, "all">; label: string; folder: string; url: string; featured?: boolean };
+
+type WorkSort = "latest" | "alpha";
+
+function getDriveId(url: string) {
+  return url.match(/\/d\/([^/]+)/)?.[1] ?? "";
+}
+
+function canPreviewWork(work: WorkItem) {
+  return work.category === "video" || work.category === "visual";
+}
 
 const workItems: WorkItem[] = [
   { id: "bomber-html", name: "BomberHero3D", category: "games", label: "لعبة HTML ثلاثية الأبعاد", folder: "اليوم الرابع", url: "https://drive.google.com/file/d/1emQkqt4ghcXwlrNWvklYqVn35vD9im_H/view?usp=drivesdk", featured: true },
@@ -204,6 +217,9 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState("about");
   const [workFilter, setWorkFilter] = useState<WorkCategory>("all");
   const [workSearch, setWorkSearch] = useState("");
+  const [workSort, setWorkSort] = useState<WorkSort>("latest");
+  const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
+  const [shareNotice, setShareNotice] = useState("");
   const [darkMode, setDarkMode] = useState(() => typeof window !== "undefined" && localStorage.getItem("remah-theme") === "dark");
 
   useEffect(() => {
@@ -216,7 +232,18 @@ export default function Home() {
     const query = workSearch.trim().toLowerCase();
     const matchesSearch = !query || `${item.name} ${item.label} ${item.folder}`.toLowerCase().includes(query);
     return matchesFilter && matchesSearch;
-  });
+  }).sort((a, b) => workSort === "alpha" ? a.name.localeCompare(b.name, "ar") : workItems.indexOf(a) - workItems.indexOf(b));
+
+  const shareWork = async (work: WorkItem, channel: "whatsapp" | "copy") => {
+    const shareUrl = work.url;
+    if (channel === "copy") {
+      await navigator.clipboard?.writeText(shareUrl);
+      setShareNotice("تم نسخ رابط المشروع");
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(`${work.name} — ${shareUrl}`)}`, "_blank", "noopener,noreferrer");
+    }
+    window.setTimeout(() => setShareNotice(""), 2200);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -363,19 +390,45 @@ export default function Home() {
             {workSearch && <button type="button" className="clear-search" onClick={() => setWorkSearch("")} aria-label="مسح البحث">×</button>}
           </label>
           <span className="work-results">{visibleWork.length} نتيجة</span>
+          <label className="work-sort">ترتيب
+            <select value={workSort} onChange={(event) => setWorkSort(event.target.value as WorkSort)} aria-label="ترتيب مكتبة الأعمال">
+              <option value="latest">الأحدث</option>
+              <option value="alpha">أبجدي</option>
+            </select>
+          </label>
         </div>
         <div className="work-grid">
           {visibleWork.map((work, index) => (
-            <a className={`work-card ${work.featured ? "work-card-featured" : ""}`} key={work.id} href={work.url} target="_blank" rel="noreferrer">
+            <article className={`work-card ${work.featured ? "work-card-featured" : ""}`} key={work.id}>
               <div className="work-card-top"><span className="work-index">{String(index + 1).padStart(2, "0")}</span><span className="work-icon"><WorkIcon category={work.category} /></span></div>
-              <div className="work-card-content"><span className="work-label">{work.label}</span><h3>{work.name}</h3><p>{work.folder}</p></div>
-              <span className="work-open"><ExternalLink size={15} /></span>
-            </a>
+              <button className="work-card-main" onClick={() => canPreviewWork(work) ? setSelectedWork(work) : window.open(work.url, "_blank", "noopener,noreferrer")}>
+                <div className="work-card-content"><span className="work-label">{work.label}</span><h3>{work.name}</h3><p>{work.folder}</p></div>
+                <span className="work-open">{canPreviewWork(work) ? <ExternalLink size={15} /> : <ExternalLink size={15} />}</span>
+              </button>
+              <div className="work-share-actions">
+                <button onClick={() => shareWork(work, "whatsapp")} aria-label={`مشاركة ${work.name} عبر واتساب`} title="مشاركة عبر واتساب"><MessageCircle size={14} /></button>
+                <button onClick={() => shareWork(work, "copy")} aria-label={`نسخ رابط ${work.name}`} title="نسخ الرابط"><Copy size={14} /></button>
+                <button onClick={() => navigator.share ? navigator.share({ title: work.name, url: work.url }) : shareWork(work, "copy")} aria-label={`مشاركة ${work.name}`} title="مشاركة"><Share2 size={14} /></button>
+              </div>
+            </article>
           ))}
         </div>
         {visibleWork.length === 0 && <div className="work-empty">لم نجد عناصر مطابقة. جرّب كلمة أخرى أو أعد ضبط الفلتر.</div>}
         <div className="works-footer"><span>كل بطاقة تفتح الملف الأصلي في Google Drive</span><span className="works-footer-line" /><span>استكشاف · حفظ · مشاركة</span></div>
+        {shareNotice && <div className="share-toast" role="status">{shareNotice}</div>}
       </section>
+
+      {selectedWork && (
+        <div className="preview-backdrop" role="dialog" aria-modal="true" aria-label={`معاينة ${selectedWork.name}`} onClick={() => setSelectedWork(null)}>
+          <div className="preview-modal" onClick={(event) => event.stopPropagation()}>
+            <button className="preview-close" onClick={() => setSelectedWork(null)} aria-label="إغلاق المعاينة"><X size={19} /></button>
+            <div className="preview-frame">
+              <iframe src={`https://drive.google.com/file/d/${getDriveId(selectedWork.url)}/preview`} title={selectedWork.name} allow="autoplay" />
+            </div>
+            <div className="preview-meta"><span>{selectedWork.label}</span><h3>{selectedWork.name}</h3><a href={selectedWork.url} target="_blank" rel="noreferrer">فتح الملف الأصلي <ExternalLink size={14} /></a></div>
+          </div>
+        </div>
+      )}
 
       <section id="experience" className="section experience-section">
         <div className="section-grid section-grid-tight">
