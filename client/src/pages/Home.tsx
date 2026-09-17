@@ -130,9 +130,17 @@ function canPreviewWork(work: WorkItem) {
 }
 
 function getWorkVisual(work: WorkItem) {
+  const driveId = getDriveId(work.url);
+  if (driveId && ["games", "pages", "video", "visual"].includes(work.category)) {
+    return `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`;
+  }
   if (work.category === "games" || work.category === "pages") return gamesVisual;
   if (work.category === "video" || work.category === "visual") return videoVisual;
   return undefined;
+}
+
+function getFallbackVisual(work: WorkItem) {
+  return work.category === "games" || work.category === "pages" ? gamesVisual : videoVisual;
 }
 
 const workItems: WorkItem[] = [
@@ -461,7 +469,7 @@ export default function Home() {
         <div className="work-grid">
           {visibleWork.map((work, index) => (
             <article className={`work-card ${work.featured ? "work-card-featured" : ""}`} key={work.id}>
-              {getWorkVisual(work) && <div className="work-card-visual" style={{ backgroundImage: `url(${getWorkVisual(work)})` }} aria-hidden="true" />}
+              {getWorkVisual(work) && <img className="work-card-visual" src={getWorkVisual(work)} onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = getFallbackVisual(work); }} alt="" aria-hidden="true" />}
               <div className="work-card-top"><span className="work-index">{String(index + 1).padStart(2, "0")}</span><span className="work-icon"><WorkIcon category={work.category} /></span></div>
               <button className="work-card-main" onClick={() => canPreviewWork(work) ? setSelectedWork(work) : window.open(work.url, "_blank", "noopener,noreferrer")}>
                 <div className="work-card-content"><span className="work-label">{work.label}</span><h3>{work.name}</h3><p>{work.folder}</p></div>

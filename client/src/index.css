@@ -585,3 +585,6 @@ html.dark-mode .testimonials-heading > p, html.dark-mode .testimonial-person sma
   .resume-sheet { width: 100%; min-height: auto; box-shadow: none; padding: 42px 52px 22px; }
   .resume-page section { break-inside: avoid; }
 }
+
+/* Work cards use project-specific Drive thumbnails with graceful fallbacks. */
+.work-card-visual { width: calc(100% + 38px); object-fit: cover; display: block; background: #f7dce5; }
