@@ -550,7 +550,7 @@ export default function Home() {
           {formSent ? (
             <div className="form-success" role="status"><Sparkles size={20} /><strong>تم استلام رسالتك بنجاح.</strong><span>سأعود إليك في أقرب فرصة.</span><button className="button button-light" onClick={() => setFormSent(false)}>إرسال رسالة أخرى</button></div>
           ) : (
-            <form className="contact-form" onSubmit={(event) => { event.preventDefault(); setFormSent(true); }}>
+            <form className="contact-form" onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); const subject = `رسالة جديدة من ${data.get("name")}`; const body = `الاسم: ${data.get("name")}\nالبريد: ${data.get("email")}\n\nالرسالة:\n${data.get("message")}`; window.location.href = `mailto:remahkhaled2022@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`; setFormSent(true); }}>
               <div className="form-row"><label>الاسم<input required name="name" placeholder="اكتب اسمك" /></label><label>البريد الإلكتروني<input required type="email" name="email" placeholder="name@example.com" /></label></div>
               <label>رسالتك<textarea required name="message" rows={4} placeholder="كيف يمكنني مساعدتك؟" /></label>
               <button className="button button-light" type="submit">إرسال الرسالة <ArrowLeft size={18} /></button>
