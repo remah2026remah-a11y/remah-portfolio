@@ -7,11 +7,16 @@ import {
   Check,
   ChevronDown,
   ExternalLink,
+  FileCode2,
+  FileText,
+  Film,
   GraduationCap,
+  Image as ImageIcon,
   Laptop,
   Mail,
   MapPin,
   Menu,
+  Music2,
   Phone,
   Quote,
   Sparkles,
@@ -25,6 +30,7 @@ const resumeUrl = "https://docs.google.com/document/d/10_P3XsCIvA6XNAQqnOmG2pRN_
 
 const navItems = [
   { label: "نبذة", href: "#about" },
+  { label: "الأعمال", href: "#works" },
   { label: "الخبرة", href: "#experience" },
   { label: "المهارات", href: "#skills" },
   { label: "التعليم", href: "#education" },
@@ -91,6 +97,93 @@ const courses = [
   { title: "السلامة التأسيسية", hours: "25 ساعة" },
 ];
 
+type WorkCategory = "all" | "games" | "video" | "pages" | "visual" | "audio" | "files";
+type WorkItem = { id: string; name: string; category: Exclude<WorkCategory, "all">; label: string; folder: string; url: string; featured?: boolean };
+
+const workItems: WorkItem[] = [
+  { id: "bomber-html", name: "BomberHero3D", category: "games", label: "لعبة HTML ثلاثية الأبعاد", folder: "اليوم الرابع", url: "https://drive.google.com/file/d/1emQkqt4ghcXwlrNWvklYqVn35vD9im_H/view?usp=drivesdk", featured: true },
+  { id: "bomber-zip", name: "BomberHeroRemah", category: "games", label: "حزمة لعبة قابلة للتنزيل", folder: "اليوم الرابع", url: "https://drive.google.com/file/d/1e9AdehaUS9ng154_jWKuWzj21BQzWZm0/view?usp=drivesdk" },
+  { id: "stylized-bomb", name: "Stylized 3D Bomb Game", category: "games", label: "لعبة ثلاثية الأبعاد", folder: "اليوم الرابع", url: "https://drive.google.com/file/d/18bxrLtH--D0AqsTfPtqJ6J7pOgmb8pXl/view?usp=drivesdk" },
+  { id: "little-stars", name: "Little Stars Nursery", category: "pages", label: "موقع تعليمي للأطفال", folder: "اليوم الرابع", url: "https://drive.google.com/file/d/1p74-FVUhgz7iERRvSY4nSua5-csu1iVe/view?usp=drivesdk", featured: true },
+  { id: "game2", name: "لعبة 2", category: "games", label: "لعبة ويب تفاعلية", folder: "اليوم الأول", url: "https://drive.google.com/file/d/16shfeRsyv8g9XDEq8_LzqL0WACPojNz8/view?usp=drivesdk" },
+  { id: "game-zip", name: "لعبة", category: "games", label: "حزمة لعبة", folder: "اليوم الأول", url: "https://drive.google.com/file/d/138Qi_TPQPLUTBInf-5awbvDXR6qVQ6iO/view?usp=drivesdk" },
+  { id: "hair-colors", name: "صبغات الشعر", category: "pages", label: "صفحة ويب تفاعلية", folder: "اليوم الأول", url: "https://drive.google.com/file/d/1NtlsWF5bE82HlIp0_YKBCCWWNWDAp6HC/view?usp=drivesdk" },
+  { id: "science", name: "تجربة علمية", category: "pages", label: "تجربة تعليمية تفاعلية", folder: "اليوم الأول", url: "https://drive.google.com/file/d/1xIVT6jsarYDqi5jHwvZOmvJ7c9RZEJL-/view?usp=drivesdk" },
+  { id: "input-devices", name: "أجهزة الإدخال في الحاسوب", category: "files", label: "عرض تقديمي PPTX", folder: "اليوم الخامس", url: "https://docs.google.com/presentation/d/1P1PIUZivuQB59yh73DxR-WuYtx62ApWG/edit?usp=drivesdk", featured: true },
+  { id: "input-devices-copy", name: "أجهزة الإدخال في الحاسوب (نسخة)", category: "files", label: "عرض تقديمي PPTX", folder: "اليوم الخامس", url: "https://docs.google.com/presentation/d/11ut0fEoL-MD0sdtgZAz3U4wLit2J7AC0/edit?usp=drivesdk" },
+  { id: "manus-pdf", name: "عرض تقديمي Manus", category: "files", label: "ملف PDF", folder: "اليوم الخامس", url: "https://drive.google.com/file/d/1IxyqCpHTNDUK4ZJugnoU1Tuh8od4wh8r/view?usp=drivesdk" },
+  { id: "video-skill", name: "فيديو باستخدام المهارة", category: "video", label: "فيديو تعليمي", folder: "اليوم الخامس", url: "https://drive.google.com/file/d/1flxVP00lrVHSZo4ncdB3NQ5sDtQT37NC/view?usp=drivesdk" },
+  { id: "untitled-video", name: "فيديو بدون عنوان", category: "video", label: "فيديو إبداعي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1ubkYL6Lt_jvHCb99Ez2cHVhIRHzyeO0B/view?usp=drivesdk" },
+  { id: "ai-video", name: "AI video", category: "video", label: "تجربة فيديو بالذكاء الاصطناعي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1JdnsZipQ9z11CSoPXQnZapttCqtvHWAP/view?usp=drivesdk", featured: true },
+  { id: "vids3", name: "فيديو Vids 3", category: "video", label: "فيديو إبداعي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1Dq3XKjvwOsz75iDzj7EHOkJTvxVNb1ww/view?usp=drivesdk" },
+  { id: "vids2", name: "فيديو Vids 2", category: "video", label: "فيديو إبداعي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1DjK3hjcLnc_QnUako1ytzpce9vU_T7OF/view?usp=drivesdk" },
+  { id: "vids", name: "فيديو Vids", category: "video", label: "فيديو قصير", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1F9-DbY_sLxAVleO8hCappC7wOvRvUEqw/view?usp=drivesdk" },
+  { id: "from-photo", name: "من صورة لفيديو", category: "video", label: "تحويل صورة إلى فيديو", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1s81k78yjDTMplEFznu-EfzTmvGwXcQHQ/view?usp=drivesdk" },
+  { id: "sand-seed", name: "ماسة ودانه", category: "video", label: "فيديو قصصي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1_LY9qZ6p9NPABGb6tDisLortRk7KkCz9/view?usp=drivesdk", featured: true },
+  { id: "seed-ar", name: "دانه بالعربي", category: "video", label: "فيديو تعليمي عربي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1a7nwjMMkbG-ok8KmuZhac-mOb5QuQwPn/view?usp=drivesdk" },
+  { id: "sand-ar", name: "ماسة بالعربي", category: "video", label: "فيديو تعليمي عربي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1GFRnz9dsf5_ouuDLNxOI579YZ5A3yZm9/view?usp=drivesdk" },
+  { id: "sand-en", name: "ماسة بالإنجليزية", category: "video", label: "فيديو تعليمي إنجليزي", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1ucsg2SgViCxglXOOvWu1wwd6lYo8gD-T/view?usp=drivesdk" },
+  { id: "step-sun", name: "خطوة نحو الشمس", category: "video", label: "فيديو قصصي", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1ALyC1M5_XO8yaHdAIVYVKECcBMogBm-k/view?usp=drivesdk", featured: true },
+  { id: "morning-mase", name: "صباح الخير يا ماسة", category: "video", label: "فيديو إبداعي", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1OfLfkWTQ9XF9wukEob-Egso5Le5VzyZc/view?usp=drivesdk" },
+  { id: "caricature", name: "Create caricature sheet", category: "video", label: "فيديو توليدي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1BMJHOfwGTidword2JN1zqXVaemY9MycD/view?usp=drivesdk" },
+  { id: "letters-book-video", name: "كتاب تعليم الأطفال الأحرف", category: "video", label: "فيديو تعليمي للأطفال", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/10cfImRjkHjzStZgE2B6PRr4TsgWtgSZZ/view?usp=drivesdk" },
+  { id: "letters-book-video-2", name: "كتاب تعليم الأطفال الأحرف", category: "video", label: "فيديو تعليمي للأطفال", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1yEEJGmgzxsQDEv6GddcaeAP43KYWZASx/view?usp=drivesdk" },
+  { id: "dialogue", name: "حوار", category: "audio", label: "مقطع صوتي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1XiSn_3BdslrHa0Ow3yQ54jaFrD7EoxfZ/view?usp=drivesdk" },
+  { id: "exhale", name: "صوت زفير", category: "audio", label: "مؤثر صوتي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1PEJ8p0EJ1O_wTJLiLT-32TvCOxJJ1Hf9/view?usp=drivesdk" },
+  { id: "mase-audio", name: "ماسة", category: "audio", label: "مقطع صوتي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/16wA0wFH2CNxiZ9SHzxqfFBsGqI31xkEN/view?usp=drivesdk" },
+  { id: "mase-audio-2", name: "صباح الخير يا ماسة", category: "audio", label: "مقطع صوتي", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1gCjsvnRgNKxOm08CxThv6bkoHLNXS3zI/view?usp=drivesdk" },
+  { id: "avatar-dana", name: "أفتار دانه", category: "visual", label: "تصميم شخصية", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/13b5vgrMTT6pY9TcQfy2N5AH_YfoUEeG2/view?usp=drivesdk" },
+  { id: "avatar-mase", name: "أفتار ماسة", category: "visual", label: "تصميم شخصية", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1iczRi3Qt5cwvOU3Kxj8OTrAwER7a3ARz/view?usp=drivesdk" },
+  { id: "gemini-image", name: "صورة مولدة بالذكاء الاصطناعي", category: "visual", label: "تجربة بصرية توليدية", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1--nCiz5pvVfD94w1QQ1hq9zcjjNLeipw/view?usp=drivesdk" },
+  { id: "ai-portrait", name: "تحويل صورة إلى بورتريه", category: "visual", label: "تجربة بصرية بالذكاء الاصطناعي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/1GS5qYKlkhzyPWArvBgh7ymNz2t7u2Yg-/view?usp=drivesdk" },
+  { id: "engine-map-2", name: "مخطط تفصيلي لمحرك السيارة", category: "visual", label: "إنفوغراف تعليمي", folder: "اليوم الثالث", url: "https://drive.google.com/file/d/13DahU-jsG4-Rs2OxrX2yzwqtQeuAiG-9/view?usp=drivesdk" },
+  { id: "engine-map", name: "مخطط تفصيلي لمحرك السيارة", category: "visual", label: "إنفوغراف تعليمي", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/19EqMUq2UEQX8eWJHXuakv6BGjAwCqPbm/view?usp=drivesdk" },
+  { id: "letters-animals", name: "الأحرف والحيوانات", category: "visual", label: "تصميم تعليمي للأطفال", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1Rtqr23XyDEVm_a4W6KTjo3L8-1HA1_EM/view?usp=drivesdk" },
+  { id: "letters-animals-2", name: "الأحرف والحيوانات 2", category: "visual", label: "تصميم تعليمي للأطفال", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1oLUlh0rzveJO3Tqv-JWow3vZHpwL3awR/view?usp=drivesdk" },
+  { id: "letters-cover", name: "غلاف كتاب الأحرف", category: "visual", label: "هوية كتاب تعليمي", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1LnPn248p7jBRnWNcSDx7FI9R4ls8NRCy/view?usp=drivesdk", featured: true },
+  { id: "letters-back", name: "الغلاف الخلفي", category: "visual", label: "تصميم غلاف", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1AqCPu5dQ_8eZDU-Hipwj4WWQtcDhIgkR/view?usp=drivesdk" },
+  { id: "letters-ad", name: "إعلان للكتاب", category: "visual", label: "مادة ترويجية", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1N4l6Gb1FgEOatW545tnB1roEz0XDkf8f/view?usp=drivesdk" },
+  { id: "room-lab", name: "مختبر حاسوب", category: "visual", label: "تصميم مساحة", folder: "تصميم غرفة", url: "https://drive.google.com/file/d/13L8ra07q2QAEZ_Vgte_pbvxy2YR-SS0S/view?usp=drivesdk" },
+  { id: "room-kids", name: "غرفة أطفال", category: "visual", label: "تصميم داخلي", folder: "تصميم غرفة", url: "https://drive.google.com/file/d/1cfE1ChEf2uSKWQ6C8q4AK9DA4LiqCM84/view?usp=drivesdk" },
+  { id: "room-victorian", name: "غرفة جلوس بطابع فيكتوري", category: "visual", label: "تصميم داخلي", folder: "تصميم غرفة", url: "https://drive.google.com/file/d/1jNxBUJLGosbqVfZMdvlbU1lFRbXExck5/view?usp=drivesdk" },
+  { id: "d-image", name: "D", category: "visual", label: "تصميم بصري", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1BxxZtVwyoDeQkLyi62DZex3hMB9pZ_Wz/view?usp=drivesdk" },
+  { id: "chef-waste", name: "تقليل هدر الطعام", category: "visual", label: "تصميم توعوي", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1wevgydbVTR5pYgdakOdUhRyRPssmER-P/view?usp=drivesdk" },
+  { id: "chef-measuring", name: "قياس هدر الطعام", category: "visual", label: "تصميم توعوي", folder: "اليوم الثاني", url: "https://drive.google.com/file/d/1ozlUqYhLEyGF_toHwRqlVM47X1tfq6pp/view?usp=drivesdk" },
+  { id: "gemini-errors", name: "تصحيح أخطاء جيمناي", category: "visual", label: "تحسين صورة", folder: "اليوم الأول", url: "https://drive.google.com/file/d/1nQjE1IiemFpJXHrfBo_17TS-vSUofXNB/view?usp=drivesdk" },
+  { id: "plate-errors", name: "تحليل أخطاء الطبق", category: "visual", label: "تحليل بصري", folder: "اليوم الأول", url: "https://drive.google.com/file/d/1FZTviqJP7XmJt5FrQ7D1U5tUbaeUMk30/view?usp=drivesdk" },
+  { id: "correction", name: "تصحيح الأخطاء", category: "visual", label: "تحسين صورة", folder: "اليوم الأول", url: "https://drive.google.com/file/d/1onxGxpdT3Zq9OGfPb-fL0UpsguxK5v4E/view?usp=drivesdk" },
+  { id: "dinosaur", name: "ديناصور", category: "visual", label: "صورة مولدة", folder: "اليوم الأول", url: "https://drive.google.com/file/d/1ERl1mVTLsLqCjY92i6qTQlbITLREuv2M/view?usp=drivesdk" },
+  { id: "truth-pdf", name: "ماسة ونور الصدق", category: "files", label: "قصة PDF", folder: "اليوم الأول", url: "https://drive.google.com/file/d/1KHlNGOuMQfCWCD-Ecz4DP9N_kur_ETgv/view?usp=drivesdk" },
+  { id: "letters-pdf", name: "غلاف كتاب الأحرف", category: "files", label: "ملف PDF", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1W2lHtC5-orfyLx6sCoKjE1q-sSqs_E_R/view?usp=drivesdk" },
+  { id: "letters-package", name: "كتاب الأحرف — حزمة الطباعة", category: "files", label: "حزمة ZIP", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1GJ2hoNhbFsQm0bWz7fpCvOT9yf6lrwp6/view?usp=drivesdk" },
+  { id: "letters-a", name: "صفحة A", category: "visual", label: "صفحة من كتاب الأحرف", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1I3sJqzDsYP6yZBPAD_iO79jnyvmp-Xo3/view?usp=drivesdk" },
+  { id: "letters-b", name: "صفحة B", category: "visual", label: "صفحة من كتاب الأحرف", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1NjBZE3i2K7yUiXYU3i-VkZSK6Cw-fkHB/view?usp=drivesdk" },
+  { id: "letters-c", name: "صفحة C", category: "visual", label: "صفحة من كتاب الأحرف", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1mpXwSeXfo8JD3Qc8XHFwLck4LcJOGctL/view?usp=drivesdk" },
+  { id: "letters-m", name: "حرف M", category: "visual", label: "صفحة من كتاب الأحرف", folder: "كتاب الأحرف", url: "https://drive.google.com/file/d/1Rzy3ph90-4KHSBxwM2ZMx1xNC30IDqxI/view?usp=drivesdk" },
+];
+
+const workFilters: { label: string; value: WorkCategory }[] = [
+  { label: "الكل", value: "all" },
+  { label: "ألعاب وصفحات", value: "games" },
+  { label: "فيديو", value: "video" },
+  { label: "صور وتصاميم", value: "visual" },
+  { label: "صوت", value: "audio" },
+  { label: "ملفات وعروض", value: "files" },
+];
+
+function WorkIcon({ category }: { category: WorkItem["category"] }) {
+  if (category === "games") return <GamepadIcon />;
+  if (category === "video") return <Film size={22} />;
+  if (category === "audio") return <Music2 size={22} />;
+  if (category === "visual") return <ImageIcon size={22} />;
+  if (category === "pages") return <FileCode2 size={22} />;
+  return <FileText size={22} />;
+}
+
+function GamepadIcon() {
+  return <span className="gamepad-icon" aria-hidden="true">✦</span>;
+}
+
 function SectionHeading({ eyebrow, title, number }: { eyebrow: string; title: string; number: string }) {
   return (
     <div className="section-heading">
@@ -106,6 +199,9 @@ function SectionHeading({ eyebrow, title, number }: { eyebrow: string; title: st
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
+  const [workFilter, setWorkFilter] = useState<WorkCategory>("all");
+
+  const visibleWork = workFilter === "all" ? workItems : workItems.filter((item) => item.category === workFilter || (workFilter === "games" && item.category === "pages"));
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -222,6 +318,36 @@ export default function Home() {
             <span>أدوات Microsoft وGoogle Workspace وAI ضمن تجربة تدريب واضحة</span>
           </div>
         </div>
+      </section>
+
+      <section id="works" className="works-section">
+        <div className="works-intro">
+          <div>
+            <p className="eyebrow"><span className="eyebrow-dot" /> 02 · مختبر الأعمال</p>
+            <h2>أفكار تتحول<br /><em>إلى تجربة.</em></h2>
+          </div>
+          <div className="works-intro-copy">
+            <p>مجموعة منتقاة من الألعاب، الصفحات التعليمية، الفيديوهات، التصاميم والمواد الرقمية التي صنعتها رماح عبر مسارات مختلفة.</p>
+            <strong><span>{workItems.length}</span> مشروعاً وملفاً · من مجلدات Drive</strong>
+          </div>
+        </div>
+        <div className="work-filter-bar" role="tablist" aria-label="تصفية الأعمال">
+          {workFilters.map((filter) => (
+            <button key={filter.value} className={workFilter === filter.value ? "selected" : ""} onClick={() => setWorkFilter(filter.value)} role="tab" aria-selected={workFilter === filter.value}>
+              {filter.label}
+            </button>
+          ))}
+        </div>
+        <div className="work-grid">
+          {visibleWork.map((work, index) => (
+            <a className={`work-card ${work.featured ? "work-card-featured" : ""}`} key={work.id} href={work.url} target="_blank" rel="noreferrer">
+              <div className="work-card-top"><span className="work-index">{String(index + 1).padStart(2, "0")}</span><span className="work-icon"><WorkIcon category={work.category} /></span></div>
+              <div className="work-card-content"><span className="work-label">{work.label}</span><h3>{work.name}</h3><p>{work.folder}</p></div>
+              <span className="work-open"><ExternalLink size={15} /></span>
+            </a>
+          ))}
+        </div>
+        <div className="works-footer"><span>كل بطاقة تفتح الملف الأصلي في Google Drive</span><span className="works-footer-line" /><span>استكشاف · حفظ · مشاركة</span></div>
       </section>
 
       <section id="experience" className="section experience-section">
